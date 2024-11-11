@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmHub</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        .bg-image{
+            background-image:url(agribiz.jpg);
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            color: white;
+        }
+        .bg-img{
+            background-image:url(bgimg.jpg);
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+            
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm bg-light navbar-light container-fluid">
+            <a class="navbar-brand" href="#">FarmHub</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#about">Who are We</a>
+                  </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="container pt-3 mt-4 d-flex flex-column justify-content-center align-items-center bg-image">
+        <h1>Welcome to FarmHub</h1>
+        <p>Your Farm Market Tracker: Empowering Farmers,Enriching Harvests.</p>
+    </div>
+    <div class="container-fluid mt-4 pt-3 d-flex flex-column justify-content-center align-items-center" id ="about" style="text-align: center;">
+        <h2>Who are We ?</h2>
+        <p>
+            FarmHub is an agri-tech platform designed to empower farmers with real-time yield tracking,predictive yield analytics,customized price insights and best markets recommendations. <br>
+            Our goal is to empower farmers with actionable insights, enabling data-driven decisions that optimize productivity.</p>
+    </div>
+    <div class="container mt-4 justify-content-center align-items-center bg-img">
+        <h2>Features</h2>
+        <div class="row mt-4 d-flex justify-content-center align-items-center">
+            <div class="col-sm-3 pt-3 mr-3" style="background-color: rgb(217, 213, 213);">
+                <h4>Yield Tracking</h4>
+                <p>A tool for recording yield and analysing the amount of crop produced in a given season.</p>
+                <a href="try.html" class="btn btn-link" role="button">Explore</a>
+            </div>
+            <div class="col-sm-3 pt-3 mr-3" style="background-color: rgb(217, 213, 213);">
+                <h4>Market Prices</h4>
+                <p>Stay updated with current market prices for various crops in your area. </p>
+                <a href="try.html" class="btn btn-link" role="button">Explore</a>
+            </div>
+            <div class="col-sm-3" style="background-color: rgb(217, 213, 213);">
+                <h4>Weather Forecast</h4>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

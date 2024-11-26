@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 dotenv.config();
 
 app.use('/farmhub/api/users', require('./routes/auth'));
+app.use('/farmhub/api', require('./routes/track'));
 
 
 app.listen(process.env.PORT, () => {

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm bg-light navbar-light container-fluid">
+            <a class="navbar-brand" href="#">FarmHub</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="register.html">Register</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="signIn.html">Sign In</a>
+                  </li>
+                </ul>
+              </div>
+        </nav>
+        <div class="container pt-3 mt-4 d-flex flex-column justify-content-center align-items-center">
+            <h1>Register</h1>
+            <form id="registrationForm">
+                <div class="form-group">
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" required>
+                    <div class="input-group-append mb-2">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                <input type="text" class="form-control" id="first-name" placeholder="Enter your First Name" name="first-name" required>
+                </div>
+                <div class="form-group">
+                <input type="text" class="form-control" id="last-name" placeholder="Enter your Last Name" name="last-name" required>
+                </div>
+                <div class="form-group">
+                <input type="tel" class="form-control" id="phone" placeholder="Enter your Phone Number" name="phone" required>
+                </div>
+                <div class="form-group">
+                <input type="date" class="form-control" id="dob" placeholder="Date of Birth" name="dob" value="1990-01-01" required>
+                </div>
+                <label class="mr-2">Gender:</label>
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" id="male" name="gender" value="male">Male
+                    </label>
+                </div>
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" id="female" name="gender" value="female">Female
+                    </label>
+                </div>
+                <div class="form-check-inline disabled">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" id="other" name="gender" value="other" disabled>Other
+                    </label>
+                </div>
+                <div class="form-group">
+                <input type="text" class="form-control" id="address" placeholder="Enter your Address" name="address" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                <p class="mt-3 text-center">Already have an account? <a href="signIn.html">Login here</a>.</p>
+            </form>
+        </div>
+        <div class="container mt-5">
+            <div id="message" class="alert alert-info fade show" role="alert" style="display: none;">
+                
+            </div>
+        
+        </div>
+    </header>
+
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? 'Show' : 'Hide';
+        });
+
+
+        document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const first_name = document.getElementById('first-name').value;
+            const last_name = document.getElementById('last-name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value;
+            const date_of_birth = document.getElementById('dob').value;
+            const address = document.getElementById('address').value;
+            
+            // Capture the selected gender
+            const gender = document.querySelector('input[name="gender"]:checked')?.value;
+
+            // Check if gender is selected
+            if (!gender) {
+                alert('Please select your gender.');
+                return;
+            }
+
+            console.log('Request Payload:', { email, password, first_name, last_name, phone, date_of_birth, gender, address });
+            
+            // Send data to server
+            const response = await fetch('http://localhost:3001/farmhub/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email,password,first_name,last_name, phone,date_of_birth, gender,address })
+            });
+
+            
+
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('New user created!');
+                window.location.href = 'signIn.html';
+
+            } else {
+                alert(data.message);
+            }
+        });
+    </script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>  
+</body>
+</html>

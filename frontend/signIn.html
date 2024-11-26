@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FarmHub</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f7f7f7;
+        }
+        .login-container {
+            margin-top: 100px;
+            max-width: 400px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            height: 45px;
+        }
+        .login-title {
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm bg-light navbar-light container-fluid">
+            <a class="navbar-brand" href="#">FarmHub</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="register.html">Register</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="signIn.html">Sign In</a>
+                  </li>
+                </ul>
+              </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="login-container">
+                <h2 class="login-title">Login to FarmHub</h2>
+
+                <form id="loginForm" method="POST"  novalidate>
+                    <!-- Email Input -->
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" required>
+                        <div class="invalid-feedback">Please enter your password.</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+
+                    <!-- Forgot password and Register Links -->
+                    <div class="mt-3 text-center">
+                        <p><a href="/forgot-password">Forgot password?</a></p>
+                        <p>Don't have an account? <a href="register.html">Register here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="message" class="alert alert-info fade show" role="alert" >
+        
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        const messageDiv = document.getElementById('message');
+
+        function showMessage(type, text){
+            messageDiv.style.display = 'block';
+            if(type == 'success'){
+                messageDiv.style.color = 'green';
+            } else {
+                messageDiv.style.color = 'red';
+            }
+            messageDiv.textContent = text;
+
+            setTimeout( () => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        };
+        
+        // JavaScript form validation and submission
+        document.getElementById('loginForm').addEventListener('submit', async(event)=> {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Client-side validation (optional, server-side validation should always be done)
+            if (!email || !password) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Send login data to the backend for authentication
+            
+            try {
+                const response = await fetch('http://localhost:3001/farmhub/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if(response.ok){
+                    localStorage.setItem('token', result.token);
+                    alert('Login successful!');
+                    showMessage('success', result.message);
+                    // Redirect to dashboard.html
+                    window.location.href = 'home.html';
+
+                } else {
+                    showMessage('failed', result.message);
+                }
+
+            } catch (error) {
+                showMessage('failed', 'An error occurred while logging in.');       
+            }
+                    
+        });
+
+        
+    </script>
+
+</body>
+</html>

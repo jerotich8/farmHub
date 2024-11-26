@@ -1,9 +1,9 @@
- const mysql = require("mysql2");
+ const mysql = require("mysql2/promise");
  const dotenv = require ("dotenv");
 
  dotenv.config();
 
-const db = mysql.createConnection({
+const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -11,32 +11,35 @@ const db = mysql.createConnection({
 });
 
 // Function to create a database
-const createDatabase = () => {
+const createDatabase = async () => {
     const dbName = process.env.DB_NAME;
 
     const createDbQuery = `CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`;
 
-    db.query(createDbQuery, (err, result) => {
-        if (err) {
-            console.error('Error creating database:', err);
-            return;
-        }
+    try {
+        // Create the database
+        
+        await pool.query(createDbQuery); // Use await to handle the promise
         console.log(`Database '${dbName}' created or already exists.`);
-    });
 
-    // Close the connection after the query
-    db.end();
+        // Now, connect to the newly created database for table creation
+        const db = mysql.createPool({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: dbName,
+        });
 
-    createTables(dbName);
+        await createTables(db); // Call the function to create tables
+
+    } catch (error) {
+        console.error('Error creating database:', error);
+    }
 };
 
-const createTables = (dbName) => {
-    const pool = mysql.createPool({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-    });
+
+const createTables = async(db) => {
+    
 
     const farmersTable = `
         CREATE TABLE IF NOT EXISTS farmers(
@@ -94,57 +97,31 @@ const createTables = (dbName) => {
             FOREIGN KEY (market_name) REFERENCES markets(market_name)
         )`
 
-    pool.query(farmersTable, (err, result) => {
-        if (err) {
-            console.error('Error creating farmers table:', err);
-            pool.end(); // Close the pool if there's an error
-            return;
-        }
-        console.log('Farmers table created or already exists.');
-
-        pool.query(cropsTable, (err, result) => {
-            if (err) {
-                console.error('Error creating crops table:', err);
-                pool.end(); // Close the pool if there's an error
-                return;
-            }
+        try {
+            await db.query(farmersTable);
+            console.log('Farmers table created or already exists.');
+    
+            await db.query(cropsTable);
             console.log('Crops table created or already exists.');
+    
+            await db.query(marketsTable);
+            console.log('Markets table created or already exists.');
+    
+            await db.query(yieldsTable);
+            console.log('Yields table created or already exists.');
 
-            pool.query(marketsTable, (err, result) => {
-                if (err) {
-                    console.error('Error creating markets table:', err);
-                    pool.end(); // Close the pool if there's an error
-                    return;
-                }
-                console.log('Markets table created or already exists.');
-
-                pool.query(yieldsTable, (err, result) => {
-                    if (err) {
-                        console.error('Error creating yields table:', err);
-                        pool.end(); // Close the pool if there's an error
-                        return;
-                    }
-                    console.log('Yields table created or already exists.');
-
-                    pool.query(pricesTable, (err, result) => {
-                        if (err) {
-                            console.error('Error creating prices table:', err);
-                            pool.end(); // Close the pool if there's an error
-                            return;
-                        }
-                        console.log('Prices table created or already exists.');
-
-                        // End the pool after all tables are created
-                        pool.end();
-                    });
-                });
-            });
-        });
-    });    
-}
-
+            await db.query(pricesTable);
+            console.log('Prices table created or already exists.');
+    
+    
+        } catch (error) {
+            console.error('Error creating tables:', error);
+    
+        } 
+    
+    };
 // Call the function to create the database
 createDatabase();
 
 
-module.exports = db.promise();
+module.exports = pool;

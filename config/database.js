@@ -74,14 +74,17 @@ const createTables = async(db) => {
     const yieldsTable = `
         CREATE TABLE IF NOT EXISTS yields(
             yield_id INT PRIMARY KEY AUTO_INCREMENT,
-            crop_name VARCHAR(255),
+            farmer_id INT,
+            crop_name VARCHAR(255) NOT NULL,
             growing_season ENUM ('Q1', 'Q2', 'Q3', 'Q4'),
+            growing_year YEAR NOT NULL,
             harvest_date DATE,
             expected_yield INT,
             actual_yield INT NOT NULL,
             yield_quality ENUM ('good', 'average', 'poor'),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (crop_name) REFERENCES crops(crop_name)
+            FOREIGN KEY (crop_name) REFERENCES crops(crop_name),
+            FOREIGN KEY (farmer_id) REFERENCES farmers(farmer_id)
         )`    
 
     const pricesTable = `

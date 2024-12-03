@@ -14,6 +14,7 @@ dotenv.config();
 
 app.use('/farmhub/api/users', require('./routes/auth'));
 app.use('/farmhub/api', require('./routes/track'));
+app.use('/farmhub/api', require('./routes/market'));
 
 
 app.listen(process.env.PORT, () => {

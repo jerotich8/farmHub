@@ -1,4 +1,7 @@
 const mysql = require("mysql2/promise");
+const fs = require("fs");
+const path = require("path");
+const csv = require("csv-parser");
 const dotenv = require ("dotenv");
 
  dotenv.config();
@@ -31,6 +34,7 @@ const createDatabase = async () => {
         });
 
         await createTables(db); // Call the function to create tables
+        await importPricesData(db); // Automatically import prices data from a CSV
 
     } catch (error) {
         console.error('Error creating database:', error);
@@ -123,6 +127,53 @@ const createTables = async(db) => {
         } 
     
     };
+
+// Function to import data into the prices table from a CSV file
+const importPricesData = async (db) => {
+    const csvFilePath = path.join(__dirname, "prices.csv");
+
+    if (!fs.existsSync(csvFilePath)) {
+        console.log("CSV file for prices data not found. Skipping import.");
+        return;
+    }
+
+    try {
+        const rows = [];
+        const checkQuery = "SELECT COUNT(*) AS count FROM prices";
+        const [result] = await db.query(checkQuery);
+
+        if (result[0].count === 0) {
+            console.log("Prices table is empty. Importing data from CSV...");
+
+            // Read the CSV file
+            fs.createReadStream(csvFilePath)
+                .pipe(csv())
+                .on("data", (row) => {
+                    rows.push([
+                        row.crop_name,
+                        row.market_name,
+                        row.county,
+                        parseFloat(row.wholesale_price),
+                        parseFloat(row.retail_price),
+                    ]);
+                })
+                .on("end", async () => {
+                    const insertQuery = `
+                        INSERT INTO prices (crop_name, market_name, county, wholesale_price, retail_price)
+                        VALUES ?`;
+
+                    await db.query(insertQuery, [rows]);
+                    console.log("Prices data imported successfully from CSV.");
+                });
+        } else {
+            console.log("Prices table already contains data. Skipping CSV import.");
+        }
+    } catch (error) {
+        console.error("Error importing prices data:", error);
+    }
+};
+
+
 // Call the function to create the database
 createDatabase();
 

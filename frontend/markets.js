@@ -1,3 +1,10 @@
+document.getElementById('logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('token'); // Remove token from localStorage
+    alert('You have been logged out');
+    window.location.href = 'signIn.html'; // Redirect to login page
+});
+
+
 document.getElementById('getRecommendation').addEventListener('click', async function () {
     const cropName = document.getElementById('cropName').value.trim();
 

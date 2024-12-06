@@ -22,6 +22,7 @@ FarmHub is a web-based platform designed to empower farmers with actionable insi
 - **Backend**: Node.js (Express framework)  
 - **Database**: MySQL  
 - **APIs**: RESTful API for communication between the frontend and backend.
+- **Python** : Flask
 
 ## How It Works
 

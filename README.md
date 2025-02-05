@@ -34,7 +34,7 @@ FarmHub is a web-based platform designed to empower farmers with actionable insi
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/your-username/farmhub.git
+   git clone https://github.com/jerotich8/farmhub.git
    ```
 2. Install dependencies for the backend:  
    ```bash

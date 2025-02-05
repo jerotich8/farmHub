@@ -28,7 +28,7 @@ FarmHub is a web-based platform designed to empower farmers with actionable insi
 
 1. Farmers enter crop details and select filters for market searches.  
 2. The system fetches data dynamically from the database and displays it in an easy-to-read table.  
-3. Users can also view crop yield trends and predictions for better planning.  
+3. Users can receive data-driven recommendations for the most profitable markets to sell their produce, based on factors such as market demand, pricing trends, and regional preferences.
 
 ## How to Run
 
@@ -38,7 +38,6 @@ FarmHub is a web-based platform designed to empower farmers with actionable insi
    ```
 2. Install dependencies for the backend:  
    ```bash
-   cd backend
    npm install
    ```
 3. Start the backend server:  
